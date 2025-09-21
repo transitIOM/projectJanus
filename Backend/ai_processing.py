@@ -1,18 +1,18 @@
 from azure.core.credentials import AzureKeyCredential
 from azure.ai.documentintelligence import DocumentIntelligenceClient
 from azure.ai.documentintelligence.models import AnalyzeDocumentRequest
-import json
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
-class ai_processing:
-    def analyze_document(formUrl):
-        endpoint = os.getenv("ENDPOINT")
-        key = os.getenv("KEY")
+class AiProcessing:
+    def __init__(self):
+        load_dotenv()
+        self.endpoint = os.getenv("ENDPOINT")
+        self.key = os.getenv("KEY")
 
-        document_intelligence_client  = DocumentIntelligenceClient(
-            endpoint=endpoint, credential=AzureKeyCredential(key)
+    def analyze_document(self, formUrl):
+        document_intelligence_client = DocumentIntelligenceClient(
+            endpoint=self.endpoint, credential=AzureKeyCredential(self.key)
         )
 
         poller = document_intelligence_client.begin_analyze_document(
@@ -72,6 +72,7 @@ class ai_processing:
         output["tables"] = []
         for table in result.tables:
             output["tables"].append(extract_table_with_days(table))
-
         output.pop("pages")
-        print(json.dumps(output, indent=2, ensure_ascii=False))
+
+        return output
+        # print(json.dumps(output, indent=2, ensure_ascii=False))
