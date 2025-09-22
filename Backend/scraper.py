@@ -1,13 +1,10 @@
+from concurrent import futures
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
 from bs4 import BeautifulSoup
 import os
 from urllib.request import urlretrieve
 from pdf2image import convert_from_path
-from pdf2image.exceptions import (
-    PDFInfoNotInstalledError,
-    PDFPageCountError,
-    PDFSyntaxError
-)
 
 class Scraper:
     def __init__(self):
@@ -38,14 +35,43 @@ class Scraper:
         for url in urls:
             urlretrieve(url, self.pdf_folder + url.split('/')[-1])
 
+    def process_file(self, file, create_directory):
+        new_dir = os.path.join(self.image_folder, file.split('.')[0])
+        create_directory(new_dir)
+        try:
+            convert_from_path(
+                os.path.join(self.pdf_folder, file),
+                output_folder=new_dir,
+                dpi=300,
+                fmt='png',
+                output_file='page'
+            )
+            return file, None
+        except Exception as e:
+            return file, e
+
     def convert_pdfs_to_images(self):
-        for file in os.listdir(self.pdf_folder):
-            new_dir = self.image_folder + file.split('.')[0]+ '/'
-            self.create_directory(new_dir)
-            try:
-                convert_from_path(file, dpi=300, output_folder=new_dir)
-            except Exception as e:
-                print(f"error converting file {file}: {e}")
+        files = os.listdir(self.pdf_folder)
+        total = len(files)
+        done = 0
+
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            futures = {
+                executor.submit(
+                    self.process_file,
+                    file,
+                    self.create_directory
+                ): file
+                for file in files
+            }
+
+            for future in as_completed(futures):
+                file, err = future.result()
+                done += 1
+                if err:
+                    print(f"[{done}/{total}] error converting {file}: {err}")
+                else:
+                    print(f"[{done}/{total}] finished {file}")
 
     def create_directory(self, path):
         try:
