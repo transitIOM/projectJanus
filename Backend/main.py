@@ -1,12 +1,17 @@
+import json
 from ai_processing import AiProcessing
 from scraper import Scraper
 import shutil
 
-# analyze_document("https://temp-ocr-data-storage.s3.eu-west-2.amazonaws.com/plsplsplsplsplsplsv3.tiff?response-content-disposition=inline&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEHsaCWV1LXdlc3QtMiJHMEUCIE5ViLp0Q0UDiIfKQO%2BRIJW4p3bgJPUTS1yOe5Kv7kL1AiEA07276NZvudVJelmOdjLEogiCBl15QJE3Uzl5DL2dpk4qwgMI9P%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgw4OTc3MjkxMjczMzQiDNt3FGw%2B9DOoCuYTKCqWA8d5ZsZcvcHvcfdK%2BlwXTi1C6BzneafGU47fgT6lFwdQCf%2FVCuF7PvqW35DM1TZe30PTaolyiI7%2BrH8vXB29BSEBng9w75Tn1PyWBjxwQcaTYeO5u4unmJvR3uP%2B6Fb1JQ23b7isAH%2FRw%2BlweGSi%2B8PbOYFvfi4Va6KYRA4AL%2FVgj8an%2Fh%2B%2BZo2PmjVQNllk7l6oBi3Aay81FrarUZMAbGPD00tGc2e4g6W%2BEWE6%2FsVKykt6C4%2FaQ0ozddn6omnJgZe%2FaoD9O4H7FQwjSJVDPJN%2FzP6t34mQvfmpLf%2BAJXTykuY%2BXxjWKfty9wPRuFMAEburRpLL5%2F6P%2FN%2BkvS5CH8LCc84%2F2In%2BjYqFH%2BRhUAGpuiIGfytqi2XsIm1aM3ZgSeMOI6FHtZmNnpPAh43ivk%2FbVeHLOgOELM310bcQGqCv4544ZNURjzcLJknsXpUdJiC4bUy7BtIwuKFVJyIcYO0Njp7iDAjCFbiy2nHJ2LR9%2BbUxaWMZ8Rnp0ZqtJP6C4fqtbEiDtwuY50dNqFzT%2F2%2BrmgdpkakwquO7xgY63gJ7C7VKMlFFO3aijKm0KWBjNXLhKoY7k%2Fzhg48bblPAKeNpn3na3wXXkAoAUbPr0AnfB8JdxaTmb36e8rl4Ngp9S5nP5MOCmmjp4bEX4QfXmdIdEltbgT8p5QzeFoBQIDsa%2FL%2BOaysWRHnovG4GuXAr9Twn9I%2F710Ql0jIiPjEwLMpN3SK49Hs9jsIhJX6xiaUro4t6Jjlchr4jKkQTMXIppM8itQHYSuu1wHXLD%2Bmo65SM8rxAjAVCqoM8cnXzWwozPqR6kIp%2BhaNnDrxz9ca3qmJaOR7AetxLjJe6VJrH%2BHJm5edbbCVJPeWGzs19xXvzbYGu7VgxGIDNTjsSy%2ByCxMckuHrD7y8q1HOl%2Fx8BM%2BCpzWhXH%2F5uQP9t6d5MBpIsZqcO5VGj4FGWy7yVKExFXG7HHSlxxlQVJ7ZbAkvbEQX4PrKyBkU4ZIv1XBFnyu0oyfLJd8win5unfKlBHA%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIA5CBGTMOTOBIWDCEB%2F20250920%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250920T182630Z&X-Amz-Expires=43200&X-Amz-SignedHeaders=host&X-Amz-Signature=f5ea840969726ec6295c777edb609b688194b53a14aaf12970ff021cde29b1a5")
+processor = AiProcessing()
+output = processor.analyze_document("https://temp-ocr-data-storage.s3.eu-west-2.amazonaws.com/plsplsplsplsplsplsv3.tiff?response-content-disposition=inline&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEEEaCWV1LXdlc3QtMiJIMEYCIQDjZ41e%2FjpbfLAEY2q4jXip%2BVHK8ZMzsxEK7SAjfVR2pAIhAKFOqbVyimpruNjVLn99%2B%2FFM69IEIE7sGlNd07BCn9uPKsIDCNr%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMODk3NzI5MTI3MzM0IgxXfmc95KNKyg0Exz0qlgPQN7WAt637eJIhUceViGrFD%2Bp3GK%2F8p0xnUji6hl7dVHGLW2ptX2bOEw6Ho8OlKqX5U2BmrOjzX0aeKMG5YcJADVq83nMoFZ1UCIir74PXHksx5SRd5hSJHFy4TZNZoyA8vUoSz36%2F21ZIjncOxPb1jiL6MgUOJUaQ%2BiumP3v6%2Bzhd5jT6n6W5pXQMaxozaJi2Cbv9KSwaDHMIB1%2BXsWz2nsHVYOfRXh4%2FWyQFstkY%2BSr8I5UVill8kEaSiKYR5MXpnnfU4yz5Esv%2FRbplsNkivmIoNek2wl4llSizcZ9aJYmjvctqvam64eUdEkzzlIkDb01dNnrJ78qwri%2FOGekv%2FR7eD0ssAfjPPnTnBcnE4WeeSlETg20DFdwTrnlzQ5oiDfi9El5UBwGJ2XspKSDMm4vg7%2Bu%2BWrpW%2FYBArgi2LJRAig4xr8mcn7Ou059SNE5uPg6f9Glee1UHTeAmBp7OyiJHLO4dgdJlVsdDgS4Y1nLOrcMbJAoQkNlvgTo2nKk3MPoW9ntWz1xKpu%2FxPFT6ykvNv8dgMLjCn8cGOt0C4QVaGSCUVzpEYX5K1ltxmNEd7Y%2BnX0%2FREas0nyJR1BetDcynGxg%2B7Bn9gQmlLkoxKAtLukaO8Wp%2BXhCl2RnpsAFtYE%2FSHRy3jDuikky9vBvj7J0RIQv19hZT7Ze%2BMOZXQJd1tffVlAC4IZ32dnPBgXzfXb7QWyHxv8MFE2l6e1NdqLIAhmLOKuJdXsMmu0ssS2jQ8YqC2P9EQsoqG7QjctFbEEfcNMpImV61qmym1hIszvLCqpUbRcQKfs4Gm%2FltCibueCAbA%2FG4hyx2ay2V0Lbwx7B32M1Sl82woZOu1e3Jm1vcPBawk2%2FE45u3GRvMCDgocvcWDEA2CopiINJP5okD0oZbVTTKAmgBiVWYgepAUof6AmWGT5m9gJvWD0P350cXiUStPQUfZ7Ttryc7uX2aH0FuBkwWPwNIxiZg5ibwaLX2hxH%2FUa%2BFWFu0p8ZYQbO2rsf2HKWUDjN4NQ%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIA5CBGTMOTCBCWIFBW%2F20251009%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20251009T162302Z&X-Amz-Expires=10800&X-Amz-SignedHeaders=host&X-Amz-Signature=d09a83cbf2a3c0d99000f48e067273eb0acad0ffbd8b976e5a8fe1aa55944cff")
 
-scraper = Scraper()
-scraper.scrape()
-print("Scraping complete, press key to delete temporary files")
-input()
-shutil.rmtree("./tempdata/")
-print("Temporary files deleted")
+with open("output.json", "w", encoding="utf-8") as f:
+    json.dump(output, f, ensure_ascii=False, indent=2)
+
+# scraper = Scraper()
+# scraper.scrape()
+# print("Scraping complete, press key to delete temporary files")
+# input()
+# shutil.rmtree("./tempdata/")
+# print("Temporary files deleted")
