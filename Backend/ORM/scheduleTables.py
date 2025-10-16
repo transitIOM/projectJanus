@@ -19,6 +19,18 @@ class timetables(orm.Model):
         "conversion_date": orm.Date(default=datetime.date.today())
     }
 
+class agency(orm.Model):
+    tablename = "agency"
+    registry = models
+    fields = {
+        "agency_id": orm.String(primary_key=True),
+        "agency_name": orm.String(),
+        "agency_url": orm.URL(),
+        "agency_timezone": orm.String(),
+        "agency_phone": orm.String(),
+        "agency_email": orm.Email(),
+    }
+
 class calendar(orm.Model):
     tablename = "calendar"
     registry = models
