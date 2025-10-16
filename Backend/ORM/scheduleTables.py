@@ -8,8 +8,6 @@ models = orm.ModelRegistry(database=database)
 # info about orm types --> https://www.encode.io/typesystem/fields/
 # gtfs schedule reference --> https://gtfs.org/documentation/schedule/reference/
 
-
-
 class timetables(orm.Model):
     tablename = "timetables"
     registry = models
