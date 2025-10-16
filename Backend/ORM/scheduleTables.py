@@ -20,10 +20,28 @@ class timetables(orm.Model):
     }
 
 class calendar(orm.Model):
-    timetable = "calendar"
+    tablename = "calendar"
     registry = models
     fields = {
+        "service_id": orm.String(primary_key=True),
+        "start_date": orm.Date(),
+        "end_date": orm.Date(),
+        "monday": orm.Enum((1,0), ("service is available for all Mondays in the date range", "service is not available for Mondays in the date range")),
+        "tuesday": orm.Enum((1,0), ("service is available for all tuesdays in the date range", "service is not available for tuesdays in the date range")),
+        "wednesday": orm.Enum((1,0), ("service is available for all wednesdays in the date range", "service is not available for wednesdays in the date range")),
+        "thursday": orm.Enum((1,0), ("service is available for all thursdays in the date range", "service is not available for thursdays in the date range")),
+        "friday": orm.Enum((1,0), ("service is available for all fridays in the date range", "service is not available for fridays in the date range")),
+        "saturday": orm.Enum((1,0), ("service is available for all saturdays in the date range", "service is not available for saturdays in the date range")),
+        "sunday": orm.Enum((1,0), ("service is available for all sundays in the date range", "service is not available for sundays in the date range")),
+    }
 
+class calendar_dates(orm.Model):
+    tablename = "calendar_dates"
+    registry = models
+    fields = {
+        "service_id": orm.ForeignKey(calendar, primary_key=True),
+        "date": orm.Date(primary_key=True),
+        "exception_type": orm.Enum((1,2),("service has been added for the specified date", "service has been removed for the specified date")),
     }
 
 class stops(orm.Model):
@@ -78,7 +96,6 @@ class stop_times(orm.Model):
         "stop_sequence": orm.Integer(primary_key=True, minimum=0),
         "arrival_time": orm.Time(),
         "departure_time": orm.Time(),
-        "pickup_type": orm.Enum() #finish this enum and file
     }
 
 class networks(orm.Model):
