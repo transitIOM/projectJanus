@@ -1,4 +1,3 @@
-from loguru import logger
 from .schedule_tables import *
 from typing import Optional
 from decimal import Decimal
