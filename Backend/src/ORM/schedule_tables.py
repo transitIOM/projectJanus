@@ -8,7 +8,7 @@ models = orm.ModelRegistry(database=database)
 # info about orm types --> https://www.encode.io/typesystem/fields/
 # gtfs schedule reference --> https://gtfs.org/documentation/schedule/reference/
 
-class timetables(orm.Model):
+class Timetables(orm.Model):
     tablename = "timetables"
     registry = models
     fields = {
@@ -17,7 +17,7 @@ class timetables(orm.Model):
         "conversion_date": orm.Date(default=datetime.date.today())
     }
 
-class agency(orm.Model):
+class Agency(orm.Model):
     tablename = "agency"
     registry = models
     fields = {
@@ -29,7 +29,7 @@ class agency(orm.Model):
         "agency_email": orm.Email(),
     }
 
-class calendar(orm.Model):
+class Calendar(orm.Model):
     tablename = "calendar"
     registry = models
     fields = {
@@ -45,16 +45,16 @@ class calendar(orm.Model):
         "sunday": orm.Enum((1,0), ("service is available for all sundays in the date range", "service is not available for sundays in the date range")),
     }
 
-class calendar_dates(orm.Model):
+class CalendarDates(orm.Model):
     tablename = "calendar_dates"
     registry = models
     fields = {
-        "service_id": orm.ForeignKey(calendar, primary_key=True),
+        "service_id": orm.ForeignKey(Calendar, primary_key=True),
         "date": orm.Date(primary_key=True),
         "exception_type": orm.Enum((1,2),("service has been added for the specified date", "service has been removed for the specified date")),
     }
 
-class stops(orm.Model):
+class Stops(orm.Model):
     tablename = "stops"
     registry = models
     fields = {
@@ -65,7 +65,7 @@ class stops(orm.Model):
         "wheelchair_boarding": orm.Enum((0,1,2),("no accessibility information for the stop", "some vehicles at this stop can be boarded by a rider in a wheelchair", "wheelchair boarding is not possible at this stop"), default=0)
     }
 
-class routes(orm.Model):
+class Routes(orm.Model):
     tablename = "routes"
     registry = models
     fields = {
@@ -88,37 +88,37 @@ class routes(orm.Model):
         "route_color": orm.String(max_length=6),
     }
 
-class trips(orm.Model):
+class Trips(orm.Model):
     tablename = "trips"
     registry = models
     fields = {
         "trip_id": orm.String(primary_key=True),
-        "route_id": orm.ForeignKey(routes),
-        "service_id": orm.ForeignKey(calendar),
+        "route_id": orm.ForeignKey(Routes),
+        "service_id": orm.ForeignKey(Calendar),
     }
 
-class stop_times(orm.Model):
+class StopTimes(orm.Model):
     tablename = "stop_times"
     registry = models
     fields = {
-        "trip_id": orm.ForeignKey(trips, primary_key=True),
-        "stop_id": orm.ForeignKey(stops),
+        "trip_id": orm.ForeignKey(Trips, primary_key=True),
+        "stop_id": orm.ForeignKey(Stops),
         "stop_sequence": orm.Integer(primary_key=True, minimum=0),
         "arrival_time": orm.Time(),
         "departure_time": orm.Time(),
     }
 
-class networks(orm.Model):
+class Networks(orm.Model):
     tablename = "networks"
     registry = models
     fields = {
         "network_id": orm.String(primary_key=True),
     }
 
-class route_networks(orm.Model):
+class RouteNetworks(orm.Model):
     tablename = "route_networks"
     registry = models
     fields = {
-        "network_id": orm.ForeignKey(networks, primary_key=True),
-        "route_id": orm.ForeignKey(routes, primary_key=True),
+        "network_id": orm.ForeignKey(Networks, primary_key=True),
+        "route_id": orm.ForeignKey(Routes, primary_key=True),
     }
