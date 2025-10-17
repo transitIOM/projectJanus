@@ -1,9 +1,6 @@
-import databases
+from .database import models
 import orm
 import datetime
-
-database = databases.Database("sqlite:///db.sqlite")
-models = orm.ModelRegistry(database=database)
 
 # info about orm types --> https://www.encode.io/typesystem/fields/
 # gtfs schedule reference --> https://gtfs.org/documentation/schedule/reference/
