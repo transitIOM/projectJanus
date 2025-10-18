@@ -37,9 +37,9 @@ class Scraper:
         for url in url_list:
             urlretrieve(url, self.pdf_folder + url.split('/')[-1])
 
-    def process_file(self, file, create_directory):
-        new_dir = os.path.join(self.image_folder, file.split('.')[0])
-        create_directory(new_dir)
+    def process_file(self, file, dirname):
+        new_dir = os.path.join(self.image_folder, dirname)
+        self.create_directory(new_dir)
         try:
             convert_from_path(
                 os.path.join(self.pdf_folder, file),
@@ -55,25 +55,11 @@ class Scraper:
     def convert_pdfs_to_images(self):
         files = os.listdir(self.pdf_folder)
         total = len(files)
-        done = 0
-
-        with ThreadPoolExecutor(max_workers=4) as executor:
-            futures = {
-                executor.submit(
-                    self.process_file,
-                    file,
-                    self.create_directory
-                ): file
-                for file in files
-            }
-
-            for future in as_completed(futures):
-                file, err = future.result()
-                done += 1
-                if err:
-                    print(f"[{done}/{total}] error converting {file}: {err}")
-                else:
-                    print(f"[{done}/{total}] finished {file}")
+        
+        for x in range(total):
+            dirname = self.url_list[x][1]
+            dirname = dirname.lower().replace(" ", "_")
+            self.process_file(files[x], dirname)
 
     def create_directory(self, path):
         try:
