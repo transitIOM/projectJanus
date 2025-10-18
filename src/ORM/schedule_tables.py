@@ -9,8 +9,8 @@ class Timetables(orm.Model):
     tablename = "timetables"
     registry = models
     fields = {
-        "hash": orm.String(primary_key=True),
-        "timetable_name": orm.String(),
+        "timetable_name": orm.String(primary_key=True),
+        "hash": orm.String(),
         "conversion_date": orm.Date(default=datetime.date.today())
     }
 
@@ -83,6 +83,7 @@ class Routes(orm.Model):
                 "monorail. railway in which the track consists of a single rail or a beam"),
         default=3),
         "route_color": orm.String(max_length=6),
+        "timetable_name": orm.ForeignKey(Timetables),
     }
 
 class Trips(orm.Model):
@@ -92,6 +93,7 @@ class Trips(orm.Model):
         "trip_id": orm.String(primary_key=True),
         "route_id": orm.ForeignKey(Routes),
         "service_id": orm.ForeignKey(Calendar),
+        "timetable_name": orm.ForeignKey(Timetables),
     }
 
 class StopTimes(orm.Model):
@@ -103,6 +105,7 @@ class StopTimes(orm.Model):
         "stop_sequence": orm.Integer(primary_key=True, minimum=0),
         "arrival_time": orm.Time(),
         "departure_time": orm.Time(),
+        "timetable_name": orm.ForeignKey(Timetables),
     }
 
 class Networks(orm.Model):

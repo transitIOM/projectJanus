@@ -27,12 +27,14 @@ class Scraper:
 
         for link in soup.find_all('a'):
             href = link.get('href')
+            text = link.text
             if href and href.endswith('.pdf'):
-                self.url_list.append(self.base_url + href)
+                self.url_list.append((self.base_url + href, text))
         return self.url_list
 
     def download_files(self, urls):
-        for url in urls:
+        url_list = [x[0] for x in urls]
+        for url in url_list:
             urlretrieve(url, self.pdf_folder + url.split('/')[-1])
 
     def process_file(self, file, create_directory):

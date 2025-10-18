@@ -1,4 +1,4 @@
-from Backend.src.ORM.create_record import create_stop
+from src.ORM.create_record import create_stop
 from ORM.schedule_tables import *
 import json
 

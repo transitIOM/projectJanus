@@ -4,9 +4,9 @@ from decimal import Decimal
 import datetime
 
 async def create_timetable(
-    hash: str,
     timetable_name: str,
-    conversion_date: Optional[datetime.date] = None
+    hash: str,
+    conversion_date: Optional[datetime.date]
 ) -> Timetables:
     """
     create a new timetable entry
@@ -158,19 +158,20 @@ async def create_route(
     route_id: str,
     agency_id: str,
     route_short_name: str,
-    route_type: int = 3,
-    route_color: str = ""
+    route_type: int,
+    route_color: str,
+    timetable_name: str,
 ) -> Routes:
     """
     create a new route entry
-    
     args:
         route_id: unique identifier for the route
         agency_id: identifier for the agency operating this route
         route_short_name: short public-facing name for the route
         route_type: type of transportation (0=tram, 1=subway, 2=rail, 3=bus, etc)
         route_color: color designation for the route (hex code or color name)
-    
+        timetable_name: identifier for the timetable associated with this route
+        
     returns:
         the created routes instance
     """
@@ -179,14 +180,16 @@ async def create_route(
         agency_id=agency_id,
         route_short_name=route_short_name,
         route_type=route_type,
-        route_color=route_color
+        route_color=route_color,
+        timetable_name=timetable_name,
     )
     return route
 
 async def create_trip(
     trip_id: str,
     route_id: str,
-    service_id: str
+    service_id: str,
+    timetable_name: str,
 ) -> Trips:
     """
     create a new trip entry
@@ -195,6 +198,7 @@ async def create_trip(
         trip_id: unique identifier for the trip
         route_id: identifier for the route this trip belongs to
         service_id: identifier for the service schedule this trip follows
+        timetable_name: identifier for the timetable associated with this route
     
     returns:
         the created trips instance
@@ -202,7 +206,8 @@ async def create_trip(
     trip = await Trips.objects.create(
         trip_id=trip_id,
         route_id=route_id,
-        service_id=service_id
+        service_id=service_id,
+        timetable_name=timetable_name,
     )
     return trip
 
@@ -211,7 +216,8 @@ async def create_stop_time(
     stop_id: str,
     stop_sequence: int,
     arrival_time: datetime.time,
-    departure_time: datetime.time
+    departure_time: datetime.time,
+    timetable_name: str,
 ) -> StopTimes:
     """
     create a new stop time entry
@@ -222,6 +228,7 @@ async def create_stop_time(
         stop_sequence: order of stops for this trip (starting from 0 or 1)
         arrival_time: arrival time at the stop
         departure_time: departure time from the stop
+        timetable_name: identifier for the timetable associated with this route
     
     returns:
         the created stoptimes instance
