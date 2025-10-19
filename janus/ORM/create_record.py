@@ -130,7 +130,7 @@ async def create_stop(
     stop_name: str,
     stop_lat: Optional[Decimal] = None,
     stop_long: Optional[Decimal] = None,
-    wheelchair_boarding: int = 0
+    wheelchair_boarding: Optional[int] = 0
 ) -> Stops:
     """
     create a new stop entry

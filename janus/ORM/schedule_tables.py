@@ -56,10 +56,18 @@ class Stops(orm.Model):
     registry = models
     fields = {
         "stop_id": orm.String(primary_key=True),
-        "stop_name": orm.String(),
+        "stop_name": orm.String(unique=True, index=True),
         "stop_lat": orm.Decimal(allow_null=True),
         "stop_long": orm.Decimal(allow_null=True),
         "wheelchair_boarding": orm.Enum((0,1,2),("no accessibility information for the stop", "some vehicles at this stop can be boarded by a rider in a wheelchair", "wheelchair boarding is not possible at this stop"), default=0)
+    }
+
+class StopNameAlias(orm.Model):
+    tablename = "StopNameAlias"
+    registry = models
+    fields = {
+        "stop_name": orm.ForeignKey(Stops, primary_key=True, index=True),
+        "bustimes_name": orm.String(primary_key=True, index=True),
     }
 
 class Routes(orm.Model):
