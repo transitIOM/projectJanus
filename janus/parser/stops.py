@@ -1,7 +1,12 @@
-from janus.ORM.create_record import create_stop
+from ORM.create_record import create_stop
 from ORM import schedule_tables as db
+from thefuzz import fuzz
+# from thefuzz import process
 import json
 import uuid6
+import requests
+from urllib.request import urlretrieve
+from bs4 import BeautifulSoup
 
 class Stops:
     def __init__(self):
@@ -37,3 +42,25 @@ class Stops:
             return "created new stop entry"
         
         return "stop exists"
+    
+    def is_match(self, name1, name2):
+        match = fuzz.token_sort_ratio(name1, name2)
+        if match >= 75:
+            return True
+        
+        return False
+    
+class busTimesScraper:
+    def __init__(self):
+        api_root = "https://bustimes.org/api_root"
+
+    def get_routes(self):
+        bus_vannin_routes_page = "https://bustimes.org/operators/bus-vannin"
+        reqs = requests.get(bus_vannin_routes_page)
+        soup = BeautifulSoup(reqs.text, 'html.parser')
+
+        for route in soup.find_all("strong", "name is-short"):
+            short = route.text()
+            url = route.parent.parent.get("href")
+            print(short, url)
+
