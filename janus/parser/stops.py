@@ -21,12 +21,19 @@ class Stops:
             bus_stop_name = row[0]
             self.file_stops.append(bus_stop_name)
     
-    async def check_for_new(self, name):
+    async def check_for_new(self, name) -> str:
         try:
-            exists = db.Stops.objects.filter(stop_name=name).exists()
+            exists = await db.Stops.objects.filter(stop_name__iexact=name).exists()
         except Exception as e:
             print(e)
-            return
+            return "db query failed"
 
         if exists == False:
-            create_stop(uuid6.uuid7(), name)
+            try:
+                await create_stop(uuid6.uuid7(), name)
+            except Exception as e:
+                print(e)
+                return("failed creating stop entry")
+            return "created new stop entry"
+        
+        return "stop exists"

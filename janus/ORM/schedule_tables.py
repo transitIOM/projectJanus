@@ -67,7 +67,7 @@ class StopNameAlias(orm.Model):
     registry = models
     fields = {
         "stop_name": orm.ForeignKey(Stops, primary_key=True, index=True),
-        "bustimes_name": orm.String(primary_key=True, index=True),
+        "alias": orm.String(primary_key=True, index=True),
     }
 
 class Routes(orm.Model):
