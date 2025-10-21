@@ -1,0 +1,43 @@
+from database import db
+from pony.orm import *
+
+def build_all():
+    build_day_options()
+    build_exception_type_options()
+    build_wheelchair_boarding_options()
+    build_route_type_options()
+
+@db_session
+def build_day_options():
+    #TODO check if entries
+    #TODO change to use new class structure
+    _0 = (value=0, description="avalible for all of day in date range")
+    _1 = db.schedule_tables.day_options(value=1, description="not avalible for all of day in date range")
+
+@db_session
+def build_exception_type_options():
+    _1 = db.schedule_tables.exception_type_options(value=1, description="service has been added for the specified date")
+    _2 = db.schedule_tables.exception_type_options(value=2, description="service has been removed for the specified date")
+
+@db_session
+def build_wheelchair_boarding_options():
+    _0 = db.schedule_tables.exception_type_options(value=0, description="no accessibility information for the stop")
+    _1 = db.schedule_tables.exception_type_options(value=1, description="some vehicles at this stop can be boarded by a rider in a wheelchair")
+    _2 = db.schedule_tables.exception_type_options(value=2, description="wheelchair boarding is not possible at this stop")
+
+@db_session
+def build_route_type_options():
+    _0 = db.schedule_tables.route_type_options(value=0, description="tram, streetcar, light rail. any light rail or street level system within a metropolitan area")
+    _1 = db.schedule_tables.route_type_options(value=1, description="subway, metro. any underground rail system within a metropolitan area")
+    _2 = db.schedule_tables.route_type_options(value=2, description="rail. used for intercity or long-distance travel")
+    _3 = db.schedule_tables.route_type_options(value=3, description="bus. used for short- and long-distance bus routes")
+    _4 = db.schedule_tables.route_type_options(value=4, description="ferry. used for short- and long-distance boat service")
+    _5 = db.schedule_tables.route_type_options(value=5, description="cable tram. used for street-level rail cars where the cable runs beneath the vehicle (e.g., cable car in san francisco)")
+    _6 = db.schedule_tables.route_type_options(value=6, description="aerial lift, suspended cable car (e.g., gondola lift, aerial tramway). cable transport where cabins, cars, gondolas or open chairs are suspended by means of one or more cables")
+    _7 = db.schedule_tables.route_type_options(value=7, description="funicular. any rail system designed for steep inclines")
+    _11 = db.schedule_tables.route_type_options(value=11, description="trolleybus. electric buses that draw power from overhead wires using poles")
+    _12 = db.schedule_tables.route_type_options(value=12, description="monorail. railway in which the track consists of a single rail or a beam")
+
+@db_session
+def build_location_type_options():
+    _-1 = db.schedule_tables.route_type_options(value=0, description="just a sign")

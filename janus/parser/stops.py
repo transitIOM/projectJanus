@@ -1,7 +1,6 @@
-from ORM.create_record import create_stop
-from ORM import schedule_tables as db
-from thefuzz import fuzz
-# from thefuzz import process
+from janus.ORM import entities as db
+from rapidfuzz import fuzz
+from rapidfuzz import process
 import json
 import uuid6
 import requests
@@ -51,16 +50,12 @@ class Stops:
         return False
     
 class busTimesScraper:
-    def __init__(self):
-        api_root = "https://bustimes.org/api_root"
-
-    def get_routes(self):
+    def get_routes():
         bus_vannin_routes_page = "https://bustimes.org/operators/bus-vannin"
         reqs = requests.get(bus_vannin_routes_page)
         soup = BeautifulSoup(reqs.text, 'html.parser')
 
-        for route in soup.find_all("strong", "name is-short"):
+        for route in soup.find_all():
             short = route.text()
             url = route.parent.parent.get("href")
             print(short, url)
-
