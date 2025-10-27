@@ -49,7 +49,7 @@ class WheelchairBoardingOptions(db.Entity):
     value = Set(lambda: Stops)
     description = Required(str)
 
-class LocationTypeOptions():
+class LocationTypeOptions(db.Entity):
     value = Set(lambda: Stops)
     description = Required(str)
 

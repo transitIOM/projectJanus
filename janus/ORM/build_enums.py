@@ -1,5 +1,4 @@
-from database import db
-from entities import DayOptions, ExceptionTypeOptions, WheelchairBoardingOptions, RouteTypeOptions, LocationTypeOptions
+from janus.ORM.entities import DayOptions, ExceptionTypeOptions, WheelchairBoardingOptions, RouteTypeOptions, LocationTypeOptions
 from pony.orm import *
 
 def build_all_enums():
@@ -42,6 +41,6 @@ def build_route_type_options():
 
 @db_session
 def build_location_type_options():
-    _-1 = LocationTypeOptions(value=-1, description="just a sign")
+    _00 = LocationTypeOptions(value=-1, description="just a sign")
     _0 = LocationTypeOptions(value=0, description="a proper bus shelter")
     _1 = LocationTypeOptions(value=1, description="idk smth like lord street")
