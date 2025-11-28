@@ -27,13 +27,13 @@ class Calendar(db.Entity):
     trips = Set(lambda: Trips)
     start_Date = Required(datetime.date)
     end_date = Required(datetime.date)
-    monday = Required(int)
-    tuesday = Required(int)
-    wednesday = Required(int)
-    thursday = Required(int)
-    friday = Required(int)
-    saturday = Required(int)
-    sunday = Required(int)
+    monday = Required(DayOptions)
+    tuesday = Required(DayOptions)
+    wednesday = Required(DayOptions)
+    thursday = Required(DayOptions)
+    friday = Required(DayOptions)
+    saturday = Required(DayOptions)
+    sunday = Required(DayOptions)
 
 class ExceptionTypeOptions(db.Entity):
     value = Required(int)
@@ -42,7 +42,7 @@ class ExceptionTypeOptions(db.Entity):
 class CalendarDates(db.Entity):
     service_id = Required(Calendar)
     date = Required(datetime.date)
-    exception_type = Required(int, min=1, max=2)
+    exception_type = Required(ExceptionTypeOptions)
     PrimaryKey(service_id, date)
 
 class WheelchairBoardingOptions(db.Entity):
