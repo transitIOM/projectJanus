@@ -46,11 +46,13 @@ class CalendarDates(db.Entity):
     PrimaryKey(service_id, date)
 
 class WheelchairBoardingOptions(db.Entity):
-    value = Set(lambda: Stops)
+    stops = Set(lambda: Stops)
+    value = Required(int)
     description = Required(str)
 
 class LocationTypeOptions(db.Entity):
-    value = Set(lambda: Stops)
+    stops = Set(lambda: Stops)
+    value = Required(int)
     description = Required(str)
 
 class Stops(db.Entity):
@@ -58,8 +60,8 @@ class Stops(db.Entity):
     stop_name = Set(lambda: StopNameAlias)
     stop_lat = Required(float)
     stop_long = Required(float)
-    wheelchair_boarding = Optional(WheelchairBoardingOptions, default=0)
-    location_type = Optional(LocationTypeOptions, default=0)
+    wheelchair_boarding = Optional(WheelchairBoardingOptions)
+    location_type = Optional(LocationTypeOptions)
 
 class StopNameAlias(db.Entity):
     stop_name = Required(Stops)
@@ -67,14 +69,15 @@ class StopNameAlias(db.Entity):
     PrimaryKey(stop_name, alias)
 
 class RouteTypeOptions(db.Entity):
-    value = Set(lambda: Routes)
+    routes = Set(lambda: Routes)
+    value = Required(int)
     description = Required(str)
 
 class Routes(db.Entity):
     route_id = Set(lambda: Trips)
     agency_id = Required(Agency)
     route_short_name = Required(str, 12)
-    route_type = Optional(RouteTypeOptions, default=3)
+    route_type = Optional(RouteTypeOptions)
     route_color = Optional(str, 6)
 
 class Trips(db.Entity):

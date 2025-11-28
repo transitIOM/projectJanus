@@ -1,4 +1,4 @@
-from janus.ORM.entities import DayOptions, ExceptionTypeOptions, WheelchairBoardingOptions, RouteTypeOptions, LocationTypeOptions
+from entities import DayOptions, ExceptionTypeOptions, WheelchairBoardingOptions, RouteTypeOptions, LocationTypeOptions
 from pony.orm import *
 
 def build_all_enums():
