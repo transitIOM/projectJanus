@@ -1,5 +1,3 @@
-from pony.orm import *
-from database import db
 from entities import *
 from build_enums import build_all_enums
 

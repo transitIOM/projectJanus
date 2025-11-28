@@ -1,5 +1,3 @@
-from concurrent import futures
-from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
 from bs4 import BeautifulSoup
 import os
