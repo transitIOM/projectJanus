@@ -1,7 +1,3 @@
-import json
-from ai_processing import AiProcessing
-from scraper import Scraper
-import shutil
 from parser import stops
 
 scraper = stops.busTimesScraper
