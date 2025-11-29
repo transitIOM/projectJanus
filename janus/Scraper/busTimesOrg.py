@@ -11,7 +11,7 @@ def get_routes():
     route_dict = dict()
     for route in routes:
         a_href = route.find_parent("a")["href"]
-        url = str(base_url + a_href)
+        url = str(base_url + a_href[1:])
         route_dict[route.text.strip('\n')] = url
     return route_dict
 
@@ -31,6 +31,8 @@ def get_stops(route_url):
         cock = stop.parent.get("class")
         if cock == ["minor"]:
             freedom = False
+        elif cock == ["minor od"]:
+            continue
         timed = freedom
         stop_list.append((stop.text.strip('\n'), timed))
     return stop_list
@@ -51,6 +53,5 @@ def get_all_stops():
 
 
 if __name__ == '__main__':
-    logger.add("file_{time}.log")
     all_stops = get_all_stops()
     print(all_stops)
