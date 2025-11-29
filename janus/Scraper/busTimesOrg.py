@@ -33,8 +33,7 @@ def get_stops(route_url):
             freedom = False
         elif cock == ["minor od"]:
             continue
-        timed = freedom
-        stop_list.append((stop.text.strip('\n'), timed))
+        stop_list.append((stop.text.strip().strip('\n').strip(','), freedom))
     return stop_list
 
 
@@ -53,5 +52,6 @@ def get_all_stops():
 
 
 if __name__ == '__main__':
+    logger.add("file_{time}.log")
     all_stops = get_all_stops()
-    print(all_stops)
+    logger.info(all_stops)
