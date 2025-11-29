@@ -10,13 +10,13 @@ class AiProcessing:
         self.endpoint = os.getenv("ENDPOINT")
         self.key = os.getenv("KEY")
 
-    def analyze_document(self, formUrl):
+    def analyze_document(self, form_url):
         document_intelligence_client = DocumentIntelligenceClient(
             endpoint=self.endpoint, credential=AzureKeyCredential(self.key)
         )
 
         poller = document_intelligence_client.begin_analyze_document(
-            "prebuilt-layout", AnalyzeDocumentRequest(url_source=formUrl)
+            "prebuilt-layout", AnalyzeDocumentRequest(url_source=form_url)
         )
         result = poller.result()
 
@@ -34,7 +34,7 @@ class AiProcessing:
             output["pages"].append(page_data)
 
         def extract_table_with_days(table):
-            # Assume first two rows are headers
+            # Assume the first two rows are headers
             header_row_1 = [cell for cell in table.cells if cell.row_index == 0]
 
             # Sort headers by column_index

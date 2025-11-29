@@ -4,7 +4,7 @@ import os
 from urllib.request import urlretrieve
 from pdf2image import convert_from_path
 
-class Scraper:
+class Timetables:
     def __init__(self):
         self.url_path = "/timetables-and-routes/bus-timetables/"
         self.base_url = "https://www.iombusandrail.im"
@@ -21,7 +21,7 @@ class Scraper:
 
     def scrape_timetables(self):
         reqs = requests.get(self.base_url + self.url_path)
-        soup = BeautifulSoup(reqs.text, 'html.parser')
+        soup = BeautifulSoup(reqs.text, 'html.Parser')
 
         for link in soup.find_all('a'):
             href = link.get('href')

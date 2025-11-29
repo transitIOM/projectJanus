@@ -5,7 +5,6 @@ from bunnet import Document, Link, Indexed
 from pydantic import BaseModel, Field
 import pymongo
 
-# --- Enums ---
 
 class DayOption(IntEnum):
     TRUE = 0
@@ -39,14 +38,6 @@ class LocationType(IntEnum):
     GENERIC_NODE = 3
     BOARDING_AREA = 4
 
-# --- Embedded Models ---
-
-class StopName(BaseModel):
-    name: str
-    source: str
-    primary: bool = False
-
-# --- Top-Level Documents (Bunnet) ---
 
 class Agency(Document):
     agency_id: Indexed(str, index_type=pymongo.TEXT, unique=True) # GTFS ID
@@ -86,9 +77,14 @@ class CalendarDate(Document):
     class Settings:
         name = "calendar_dates"
 
+class StopName(BaseModel):
+    name: str
+    source: str
+    primary: bool = False
+
 class Stop(Document):
     stop_id: Indexed(str, index_type=pymongo.TEXT, unique=True) # GTFS ID
-    stop_names: List[StopName] = []
+    stop_names: List[StopName]
     stop_lat: float
     stop_lon: float
     wheelchair_boarding: Optional[WheelchairBoarding] = WheelchairBoarding.NO_INFO
@@ -100,6 +96,9 @@ class Stop(Document):
     
     class Settings:
         name = "stops"
+        indexes = [
+            "stop_names.name",
+        ]
 
 class Route(Document):
     route_id: Indexed(str, index_type=pymongo.TEXT, unique=True) # GTFS ID
@@ -116,7 +115,7 @@ class Route(Document):
     class Settings:
         name = "routes"
 
-class StopTime(BaseModel):
+class StopTime(Document):
     """Represents a single stop within a trip. (stop_times.txt)"""
     stop_id: Link[Stop]  # Reference to Stop.stop_id
     stop_sequence: int = Field(ge=0)
